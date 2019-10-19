@@ -1,16 +1,39 @@
+using System;
+
 class Player
 {
     public string Name { get; private set; }
-    public float WeaponCooldown { get; private set; }
-    public float MovementDirectionX { get; private set; }
-    public float MovementDirectionY { get; private set; }
     public int Age { get; private set; }
-    public int WeaponDamage { get; private set; }
-    public float MovementSpeed { get; private set; }
 
-    public void Move()
+    private Weapon _weapon;
+    private Movment _movment;
+
+    public Player(string name, int age, Movment moving, Weapon weapon)
     {
-        //Do move
+        _weapon = weapon;
+        _movment = moving;
+    }
+
+    public void Attack()
+    {
+        _weapon.Attack();
+    }
+
+    public bool IsReloading()
+    {
+        return _weapon.IsReloading();
+    }
+}
+
+class Weapon
+{
+    public float WeaponCooldown { get; private set; }
+    public int WeaponDamage { get; private set; }
+
+    public Weapon(int damage, float cooldown)
+    {
+        WeaponDamage = damage;
+        WeaponCooldown = cooldown;
     }
 
     public void Attack()
@@ -21,5 +44,22 @@ class Player
     public bool IsReloading()
     {
         throw new NotImplementedException();
+    }
+}
+
+class Movment
+{
+    public float MovementDirectionX { get; private set; }
+    public float MovementDirectionY { get; private set; }
+    public float MovementSpeed { get; private set; }
+
+    public Movment(float speed)
+    {
+        MovementSpeed = speed;
+    }
+
+    public void Move()
+    {
+        //Do move
     }
 }
