@@ -6,9 +6,9 @@ class Player
     public int Age { get; private set; }
 
     private Weapon _weapon;
-    private Movment _movment;
+    private Movement _movment;
 
-    public Player(string name, int age, Movment moving, Weapon weapon)
+    public Player(string name, int age, Movement moving, Weapon weapon)
     {
         _weapon = weapon;
         _movment = moving;
@@ -27,13 +27,13 @@ class Player
 
 class Weapon
 {
-    public float WeaponCooldown { get; private set; }
-    public int WeaponDamage { get; private set; }
+    public float Cooldown { get; private set; }
+    public int Damage { get; private set; }
 
     public Weapon(int damage, float cooldown)
     {
-        WeaponDamage = damage;
-        WeaponCooldown = cooldown;
+        Damage = damage;
+        Cooldown = cooldown;
     }
 
     public void Attack()
@@ -47,15 +47,15 @@ class Weapon
     }
 }
 
-class Movment
+class Movement
 {
-    public float MovementDirectionX { get; private set; }
-    public float MovementDirectionY { get; private set; }
-    public float MovementSpeed { get; private set; }
+    public float DirectionX { get; private set; }
+    public float DirectionY { get; private set; }
+    public float Speed { get; private set; }
 
-    public Movment(float speed)
+    public Movement(float speed)
     {
-        MovementSpeed = speed;
+        Speed = speed;
     }
 
     public void Move()
