@@ -58,8 +58,16 @@ class Bank
         _states.Push(new List<Account>(_accounts));
     }
 
+    public bool CanUndo()
+    {
+        return _states.Count > 0;
+    }
+
     public void Undo()
     {
+        if (_states.Count == 0)
+            throw new Exception("No previous sates saved.");
+
         _accounts = _states.Pop();
     }
 }
