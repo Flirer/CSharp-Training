@@ -13,15 +13,7 @@ public class User
     public string FullName { get => _firstName + " " + _lastName; }
     public int Id { get => _id; }
 
-    private User(int Id, string FirstName, string LastName, int Salary)
-    {
-        _id = Id;
-        _firstName = FirstName;
-        _lastName = LastName;
-        _salary = Salary;
-    }
-
-    public static User CreateUser(int Id, string FirstName, string LastName, int Salary)
+    public User(int Id, string FirstName, string LastName, int Salary)
     {
         if (string.IsNullOrWhiteSpace(FirstName))
             throw new ArgumentException();
@@ -29,16 +21,19 @@ public class User
         if (string.IsNullOrWhiteSpace(LastName))
             throw new ArgumentException();
 
-        return new User(Id, FirstName, LastName, Salary);
+        _id = Id;
+        _firstName = FirstName;
+        _lastName = LastName;
+        _salary = Salary;
     }
 }
 
 
-public class UsersManager
+public class UserStorage
 {
     private List<User> _users;
 
-    public UsersManager()
+    public UserStorage()
     {
         _users = new List<User>();
     }
@@ -51,7 +46,7 @@ public class UsersManager
         if (TryGetUser(Id) != null)
             throw new ArgumentException();
 
-        User user = User.CreateUser(Id, FirstName, LastName, Salary);
+        User user = new User(Id, FirstName, LastName, Salary);
         _users.Add(user);
 
         return user;
