@@ -4,27 +4,31 @@ using System.Linq;
 
 public class User
 {
-    private int _id;
     private string _firstName;
     private string _lastName;
-    private int _salary;
 
-    public int Salary { get => _salary; set => _salary = value; }
-    public string FullName { get => _firstName + " " + _lastName; }
-    public int Id { get => _id; }
+    public readonly int Salary;
+    public readonly int Id;
 
-    public User(int Id, string FirstName, string LastName, int Salary)
+    public string FullName => ToFullName(_firstName, _lastName);
+
+    public User(int id, string firstName, string lastName, int salary)
     {
-        if (string.IsNullOrWhiteSpace(FirstName))
-            throw new ArgumentException();
+        if (string.IsNullOrWhiteSpace(firstName))
+            throw new ArgumentException(firstName);
 
-        if (string.IsNullOrWhiteSpace(LastName))
-            throw new ArgumentException();
+        if (string.IsNullOrWhiteSpace(lastName))
+            throw new ArgumentException(lastName);
 
-        _id = Id;
-        _firstName = FirstName;
-        _lastName = LastName;
-        _salary = Salary;
+        Id = id;
+        _firstName = firstName;
+        _lastName = lastName;
+        Salary = salary;
+    }
+
+    public static string ToFullName(string firstName, string lastname)
+    {
+        return firstName + " " + lastname;
     }
 }
 
@@ -38,33 +42,30 @@ public class UserStorage
         _users = new List<User>();
     }
 
-    public User AddUser(int Id, string FirstName, string LastName, int Salary)
+    public User AddUser(User user)
     {
-        if (TryGetUser(FirstName, LastName) != null)
-            throw new ArgumentException();
+        if (user == null)
+            throw new ArgumentException(user);
 
-        if (TryGetUser(Id) != null)
-            throw new ArgumentException();
+        if (TryGetUser(user.FullName) != null)
+            throw new ArgumentException(user.FullName);
 
-        User user = new User(Id, FirstName, LastName, Salary);
+        if (TryGetUser(user.Id) != null)
+            throw new ArgumentException(user.Id);
+
         _users.Add(user);
 
         return user;
     }
 
-    public bool TryRemoveUser(int id)
+    public User TryGetUser(string firstName, string lastName)
     {
-        return _users.Remove(TryGetUser(id));
+        return _users.FirstOrDefault(user => user.FullName == User.ToFullName(firstName, lastName));
     }
 
-    public bool TryRemoveUser(string FirstName, string LastName)
+    public User TryGetUser(string FullNfme)
     {
-        return _users.Remove(TryGetUser(FirstName, LastName));
-    }
-
-    public User TryGetUser(string FirstName, string LastName)
-    {
-        return _users.FirstOrDefault(user => user.FullName == FirstName + " " + LastName);
+        return _users.FirstOrDefault(user => user.FullName == FullNfme);
     }
 
     public User TryGetUser(int id)
