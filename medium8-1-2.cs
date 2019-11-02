@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Task
 {
@@ -7,82 +8,75 @@ namespace Task
     {
         public static void Main(string[] args)
         {
-            int obj1x = 5;
-            int obj1y = 5;
-            bool isalive1 = true;
-            int obj2x = 10;
-            int obj2y = 10;
-            bool isalive2 = true;
-            int obj3x = 15;
-            int obj3y = 15;
-            bool isalive3 = true;
-
             Random random = new Random();
+            UnitRenderer unitRenderer = new UnitRenderer();
+
+            Unit[] units = new Unit[3];
+            units[0] = new Unit(5, 5, '0');
+            units[1] = new Unit(10, 10, '1');
+            units[2] = new Unit(15, 15, '2');
 
             while (true)
             {
-                if (obj1x == obj2x && obj1y == obj2y)
+                foreach (Unit unit in units)
                 {
-                    isalive1 = false;
-                    isalive2 = false;
+                    unit.Move(random.Next(-1, 1), random.Next(-1, 1));
                 }
+                unitRenderer.RenderUnits(units);
+            }
+        }
+    }
 
-                if (obj1x == obj3x && obj1y == obj3y)
-                {
-                    isalive1 = false;
-                    isalive3 = false;
-                }
+    public class Unit
+    {
+        private int _x;
+        private int _y;
+        private bool _isAlive = true;
+        private char _model;
 
-                if (obj2x == obj3x && obj2y == obj3y)
-                {
-                    isalive2 = false;
-                    isalive3 = false;
-                }
+        public int X { get => _x; }
+        public int Y { get => _y; }
+        public bool IsAlive { get => _isAlive; }
+        public char Model { get => _model; }
 
-                obj1x += random.Next(-1, 1);
-                obj1y += random.Next(-1, 1);
+        public Unit(int x, int y, char model)
+        {
+            _x = x;
+            _y = y;
+            _model = model;
+        }
 
-                obj2x += random.Next(-1, 1);
-                obj2y += random.Next(-1, 1);
+        public void Move(int x, int y)
+        {
+            if (_x + x >= 0)
+                _x += x;
 
-                obj3x += random.Next(-1, 1);
-                obj3y += random.Next(-1, 1);
+            if (_y + y >= 0)
+                _y += y;
+        }
 
-                if (obj1x < 0)
-                    obj1x = 0;
+        public void Die()
+        {
+            _isAlive = false;
+        }
+    }
 
-                if (obj1y < 0)
-                    obj1y = 0;
+    public class UnitRenderer
+    {
+        public void RenderUnits(Unit[] units)
+        {
+            for (int i = 0; i < units.Length; i++)
+            {
+                RenderUnit(units[i]);
+            }
+        }
 
-                if (obj2x < 0)
-                    obj2x = 0;
-
-                if (obj2y < 0)
-                    obj2y = 0;
-
-                if (obj3x < 0)
-                    obj3x = 0;
-
-                if (obj3y < 0)
-                    obj3y = 0;
-
-                if (isalive1)
-                {
-                    Console.SetCursorPosition(obj1x, obj1y);
-                    Console.Write("1");
-                }
-
-                if (isalive2)
-                {
-                    Console.SetCursorPosition(obj2x, obj2y);
-                    Console.Write("2");
-                }
-
-                if (isalive3)
-                {
-                    Console.SetCursorPosition(obj3x, obj3y);
-                    Console.Write("3");
-                }
+        public void RenderUnit(Unit unit)
+        {
+            if (unit.IsAlive)
+            {
+                Console.SetCursorPosition(unit.X, unit.Y);
+                Console.Write(unit.Model);
             }
         }
     }
