@@ -6,8 +6,7 @@ class Wombat : Creature
 
     public override void TakeDamage(int damage)
     {
-        Health -= damage - Armor;
-        base.TakeDamage(damage);
+        base.TakeDamage(damage - Armor);
     }
 }
 
@@ -17,8 +16,7 @@ class Human : Creature
 
     public override void TakeDamage(int damage)
     {
-        Health -= damage / Agility;
-        base.TakeDamage(damage);
+        base.TakeDamage(damage / Agility);
     }
 }
 
@@ -28,6 +26,7 @@ abstract class Creature
 
     virtual public void TakeDamage(int damage)
     {
+        Health -= damage;
         if (Health <= 0)
         {
             Console.WriteLine("Я умер");
